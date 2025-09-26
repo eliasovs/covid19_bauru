@@ -125,26 +125,50 @@ legend('Location', 'northwest');
 
 
 
-%% == GRÁFICOS COMPARANDO FRACIONÁRIO E CLÁSSICO ==
-% === CASOS ACUMULADOS ===
-figure;
-hold on; 
-plot(t, casos_classico, 'g-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de casos acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
-plot(t, casos_101, 'c-', 'LineWidth', 2, 'DisplayName', 'Curva do modelo fracionário Estimado pela Estratégia Computacional 1 \alpha = 1.01');
-plot(t, casos_reais, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de casos acumulados de Covid-19 em Bauru');
-xlabel('Dias (desde 30/03/2020)', 'FontSize', 14);
-ylabel('Casos acumulados', 'FontSize', 14);
-title('Casos acumulados de Covid-19 em Bauru', 'FontSize', 16);
-legend('Location', 'northwest', 'FontSize', 17); 
-grid on;
 
-% === GRÁFICO: ÓBITOS ACUMULADOS ===
-figure;
-hold on;
-plot(t, obitos_classico, 'm-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de mortes acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
-plot(t, obitos_101, 'y-', 'LineWidth', 2, 'DisplayName', 'Curva do modelo fracionário Estimado pela Estratégia Computacional 1 \alpha = 1.01');
-plot(t, obitos_reais, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de mortes acumulados de Covid-19 em Bauru'); 
-xlabel('Dias desde 30/03/2020', 'FontSize', 14);
-ylabel('Óbitos acumulados', 'FontSize', 14);
-title('Mortes acumuladas de Covid-19 em Bauru', 'FontSize', 16);
-legend('Location', 'northwest', 'FontSize', 17); grid on;
+%% === SIMULAÇÃO DO MODELO CLÁSSICO (alpha = 1) ===
+beta_cl = 0.000000480095181;
+lambda_cl = 0.099847993427015;
+gamma_cl = 0.011498103166975;
+
+f_classico = @(t, y) [
+    -beta_cl * y(1) * y(2);
+     beta_cl * y(1) * y(2) - lambda_cl * y(2) - gamma_cl * y(2);
+     lambda_cl * y(2);
+     gamma_cl * y(2)
+];
+
+[~, y_classico] = ode45(f_classico, t, y_0);
+
+S_class = y_classico(:,1);
+I_class = y_classico(:,2);
+R_class = y_classico(:,3);
+D_class = y_classico(:,4);
+
+casos_classico = I_class + R_class + D_class;
+obitos_classico = D_class;
+
+
+%% == GRÁFICOS COMPARANDO FRACIONÁRIO E CLÁSSICO ==
+    % === CASOS ACUMULADOS ===
+    figure;
+    hold on; 
+    plot(t, casos_classico, 'g-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de casos acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
+    plot(t, casos_modelo, 'b-', 'LineWidth', 2, 'DisplayName', 'Modelo fracionário');
+    plot(t, casos_reais, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de casos acumulados de Covid-19 em Bauru');
+    xlabel('Dias (desde 30/03/2020)', 'FontSize', 14);
+    ylabel('Casos acumulados', 'FontSize', 14);
+    title('Casos acumulados de Covid-19 em Bauru', 'FontSize', 16);
+    legend('Location', 'northwest', 'FontSize', 17); 
+    grid on;
+    
+    % === GRÁFICO: ÓBITOS ACUMULADOS ===
+    figure;
+    hold on;
+    plot(t, obitos_classico, 'm-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de mortes acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
+    plot(t, obitos_modelo, 'r-', 'LineWidth', 2, 'DisplayName', 'Modelo fracionário');
+    plot(t, obitos_reais, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de mortes acumulados de Covid-19 em Bauru'); 
+    xlabel('Dias desde 30/03/2020', 'FontSize', 14);
+    ylabel('Óbitos acumulados', 'FontSize', 14);
+    title('Mortes acumuladas de Covid-19 em Bauru', 'FontSize', 16);
+    legend('Location', 'northwest', 'FontSize', 17); grid on;

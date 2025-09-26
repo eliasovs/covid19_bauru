@@ -298,9 +298,9 @@ legend('Location', 'northwest', 'FontSize', 17); grid on;
 % === GRÁFICO: CASOS ACUMULADOS ===
 figure;
 hold on; % <-- aqui!
-%plot(t, casos_classico, 'g-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de casos acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
+plot(t, casos_classico, 'g-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de casos acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
 %plot(t, casos_101, 'c-', 'LineWidth', 2, 'DisplayName', 'Curva do modelo fracionário Estimado pela Estratégia Computacional 1 \alpha = 1.01');
-%plot(t, casos_modelo, 'b-', 'LineWidth', 2, 'DisplayName', 'Curva do modelo fracionário Estimado pela Estratégia Computacional 2 \alpha  = 1.10835');
+plot(t, casos_modelo, 'b-', 'LineWidth', 2, 'DisplayName', 'Curva do modelo fracionário Estimado pela Estratégia Computacional 2 \alpha  = 1.10835');
 plot(t, casos_reais, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de casos acumulados de Covid-19 em Bauru');
 xlabel('Dias (desde 30/03/2020)', 'FontSize', 11);
 ylabel('Casos acumulados', 'FontSize', 11);
@@ -322,65 +322,4 @@ ylabel('Óbitos acumulados', 'FontSize', 11);
 title('Mortes acumuladas de Covid-19 em Bauru', 'FontSize', 14);
 ylim([0 30]);  % <-- Aqui você fixa os limites do eixo Y
 legend('Location', 'northwest', 'FontSize', 12); grid on;
-
-
-%%
-% Tmp grafico 90
-
-
-
-
-%% === SIMULAÇÃO COM 90 DIAS USANDO PARÂMETROS ESTIMADOS ===
-
-% Novos parâmetros estimados
-%beta_90   = 0.000001560969841;
-%lambda_90 = 0.174349279428620;
-%gamma_90  = 0.014894814476100;
-%alpha_90  = 1.10835;
-
-% Novas condições para 90 dias
-%t0_90 = 0;
-%tf_90 = 89;
-%h_90 = 1;
-%t_90 = t0_90:h_90:tf_90;
-
-% Derivada inicial para alpha > 1
-%dy0_90 = [
-%    -beta_90 * S0 * I0;
-%     beta_90 * S0 * I0 - lambda_90 * I0 - gamma_90 * I0;
-%     lambda_90 * I0;
-%     gamma_90 * I0
-%];
-%y_inicial_90 = [y0, dy0_90];
-
-% Sistema fracionário com alpha ajustado
-%f_fun_90 = @(t, y, param) [
-%    -(param(1)^alpha_90) * y(1) * y(2);
-%     (param(1)^alpha_90) * y(1) * y(2) - (param(2)^alpha_90) * y(2) - (param(3)^alpha_90) * y(2);
-%     (param(2)^alpha_90) * y(2);
-%     (param(3)^alpha_90) * y(2)
-%];
-
-% Simulação com fde_pi12_pc para 90 dias
-%[t_sim_90, y_sim_90] = fde_pi12_pc([alpha_90, alpha_90, alpha_90, alpha_90], f_fun_90, t0_90, tf_90, y_inicial_90, h_90, [beta_90, lambda_90, gamma_90]);
-
-%S_90 = y_sim_90(1,:);
-%I_90 = y_sim_90(2,:);
-%R_90 = y_sim_90(3,:);
-%D_90 = y_sim_90(4,:);
-
-%casos_modelo_90  = I_90 + R_90 + D_90;
-%obitos_modelo_90 = D_90;
-
-% === GRÁFICO: CASOS ACUMULADOS - 90 DIAS ===
-%figure;
-%hold on;
-%plot(t_90, casos_classico, 'g-', 'LineWidth', 2, 'DisplayName', 'Curva estimada de casos acumulados de Covid-19 em Bauru: modelo clássico (\alpha = 1)');
-%plot(t_90, casos_modelo_90, 'b-', 'LineWidth', 2, 'DisplayName', 'Curva estimada (90 dias): modelo fracionário \alpha = 1.10835');
-%plot(t, casos_reais, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de casos acumulados de Covid-19 em Bauru');
-%plot(dias_90, casos_acumulados_90, 'ko', 'MarkerSize', 6, 'DisplayName', 'Dados de casos acumulados de Covid-19 em Bauru');
-%xlabel('Dias desde 30/03/2020'); ylabel('Casos acumulados'); 
-%title('Casos acumulados de Covid-19 em Bauru - 90 dias');
-%grid on;
-%legend('Location', 'northwest');
 
