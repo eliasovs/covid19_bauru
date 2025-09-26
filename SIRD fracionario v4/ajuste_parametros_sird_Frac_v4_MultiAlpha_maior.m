@@ -56,11 +56,14 @@ param_ini = [0.0000004938, 0.1, 0.0128, 1.1, 1.1, 1.1, 1.1];
 % Limites inferior e superior
 %Estrategia 3:  
 %lb = [1e-9, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001];
-%Estrategia 4: 
-lb = [1e-9, 0.001, 0.001, 1.001, 1.001, 1.001, 1.001];
-ub = [1e-5, 0.2, 0.05, 1.5, 1.5, 1.5, 1.5];
-%Testar com limite superior próximo de 2:
-%ub = [1e-5, 0.2, 0.05, 1.99, 1.99, 1.99, 1.99];
+%Estrategia 4 (com alphas inferiores variando acima de 1)  
+%lb = [1e-9, 0.001, 0.001, 1.001, 1.001, 1.001, 1.001];
+%ub = [1e-5, 0.2, 0.05, 1.4, 1.4, 1.4, 1.4];
+
+%Estrategia 5 (tentando deixar alpha1 inicial abaixo de 1)  
+lb = [1e-9, 0.001, 0.001, 0.55, 1.001, 1.001, 1.001];
+ub = [1e-5, 0.2, 0.05, 1.4, 1.4, 1.4, 1.4];
+
 
 % Dados reais
 casos_reais  = casos_acumulados(1:62);
